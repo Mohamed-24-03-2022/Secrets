@@ -26,7 +26,7 @@ const userSchema = new Schema({
 // it must be added before we create our mongoose model
 // encryptedFields to encrypt the pw only
 // process.env.SECRET to get access to our "environment variables"
-// we put in .gitignore file so we don't upload it to public.
+// we put in .gitignore file so we don't upload sensitive data to public.
 userSchema.plugin(encrypt, { secret: process.env.SECRET, encryptedFields: ["password"] });
 
 const User = new model("User", userSchema);
