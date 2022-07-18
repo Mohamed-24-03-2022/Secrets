@@ -4,10 +4,12 @@ const express = require("express");
 const app = express();
 const ejs = require("ejs");
 const mongoose = require("mongoose");
+// md5 is a hash function to use it for the password
+const md5 = require("md5");
 const { Schema } = mongoose;
 const { model } = mongoose;
 // npm package to encrypt data in DB.
-const encrypt = require("mongoose-encryption");
+//? const encrypt = require("mongoose-encryption");
 const port = 3000;
 
 app.use(express.static("public"));
@@ -26,9 +28,9 @@ const userSchema = new Schema({
 // it must be added before we create our mongoose model
 // encryptedFields to encrypt the pw only
 // process.env.SECRET to get access to our "environment variables"
-// we put in .gitignore file so we don't upload sensitive data it to public.
-// when deploying the app, platfroms have some ways to handle it liek heroku config-vars
-userSchema.plugin(encrypt, { secret: process.env.SECRET, encryptedFields: ["password"] });
+// we put in .gitignore file so we don't upload sensitive data to public.
+// when deploying the app, platfroms have some ways to handle it like heroku config-vars
+//? userSchema.plugin(encrypt, { secret: process.env.SECRET, encryptedFields: ["password"] });
 
 const User = new model("User", userSchema);
 
@@ -48,7 +50,7 @@ app.route("/login")
     })
     .post((req, res) => {
         const username = req.body.username;
-        const password = req.body.password;
+        const password = md5(req.body.password); // hashing password
         // mongo will decrypt the pw to use it here
         User.findOne({ email: username }, (err, foundUser) => {
             if (err) {
@@ -71,7 +73,7 @@ app.route("/register")
     .post((req, res) => {
         const newUser = new User({
             email: req.body.username,
-            password: req.body.password
+            password: md5(req.body.password) // hashing pw
         });
         // mongo will encrypt the pw when saving it to DB
         newUser.save((err) => {
