@@ -7,17 +7,17 @@ const mongoose = require("mongoose");
 
 //! to use cookies (saving browsing sessions):
 const session = require("express-session");
-//! passport hash and salt the pw automatically in the process
+//! passport libary to hash and salt the pw automatically in the process
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 
 //! md5 is a hash function to use it for the password
 // const md5 = require("md5");
 
-
 const { Schema } = mongoose;
 const { model } = mongoose;
-// npm package to encrypt data in DB.
+
+//* npm package to encrypt data in DB.
 // const encrypt = require("mongoose-encryption");
 const port = 3000;
 
@@ -40,17 +40,17 @@ const userSchema = new Schema({
     email: String,
     password: String
 });
-// below mongoose schema
+// must be below mongoose schema
 userSchema.plugin(passportLocalMongoose);
 
-// encryption key => moved into .env file
+//* encryption key => moved into .env file
 // const secret = "ThisMyLittleSecret.";
 
-// it must be added before we create our mongoose model
-// encryptedFields to encrypt the pw only
-// process.env.SECRET to get access to our "environment variables"
-// we put in .gitignore file so we don't upload sensitive data to public.
-// when deploying the app, platfroms have some ways to handle it like heroku config-vars
+//* it must be added before we create our mongoose model
+//* encryptedFields to encrypt the pw only
+//* process.env.SECRET to get access to our "environment variables"
+//* we put in .gitignore file so we don't upload sensitive data to public.
+//* when deploying the app, platfroms have some ways to handle it like heroku config-vars
 // userSchema.plugin(encrypt, { secret: process.env.SECRET, encryptedFields: ["password"] });
 
 const User = new model("User", userSchema);
@@ -77,20 +77,20 @@ app.route("/login")
     .post((req, res) => {
         // const username = req.body.username;
         // const password = req.body.password
-        // // mongo will decrypt the pw to use it here
+        // //* mongo will decrypt the pw automatically to use it here
         // User.findOne({ email: username }, (err, foundUser) => {
         //     if (err) {
         //         console.log(err);
         //     } else {
         //         if (foundUser) {
-        //             // rendering secrets only if user is already registred and typed the correct password
+        //             //* rendering secrets only if user is already registred and typed the correct password
         //             if (foundUser.password === password) {
         //                 res.render("secrets");
         //             }
         //         }
         //     }
         // });
-        //? Using passport:
+        //! Using passport:
         const user = new User({
             username: req.body.username,
             password: req.body.password
@@ -126,15 +126,15 @@ app.route("/register")
     .post((req, res) => {
         // const newUser = new User({
         //     email: req.body.username,
-        //     password: md5(req.body.password) //? to hash the pw
+        //     password: md5(req.body.password) //* to hash the pw
         // });
-        //?   mongo will encrypt the pw when saving it to DB
+        //*   mongo will encrypt the pw when saving it to DB
         // newUser.save((err) => {
         //     if (err) { console.log(err); }
-        //?      rendering secrets only if user is registred or loged in.
+        //*      rendering secrets only if user is registred or loged in.
         //     else { res.render("secrets") }
         // });
-        //? register from passport-local-mongoose package
+        //* register from passport-local-mongoose package
         User.register({ username: req.body.username }, req.body.password, (err, user) => {
             if (err) {
                 console.log(err);
