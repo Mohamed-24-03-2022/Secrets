@@ -1,0 +1,19 @@
+Universel selector: *{ }
+grouping selector: .read, .unread { }
+chaining selectors: .subsection.header{ }
+Descendant Combinator: .ancestor .contents { }
+
+CSS CASCADE: 
+1/ Specificity 
+inline css > internal css > external css
+ID selectors > Class selectors  > Type selectors 
+more specified take the lead (amounts of each selector type)
+(+, ~, >, *, and the empty space) have no specificity value
+2/ Inheritance: 
+use mostly for Typography based properties.
+3/ Rule Order: 
+the last defined is the winner.
+
+
+
+
